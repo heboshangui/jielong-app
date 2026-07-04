@@ -59,6 +59,49 @@ Page({
     this.setData({ presetNames: [...new Set([...this.data.presetNames, ...names])], presetInput: '' })
   },
   clearPreset() { this.setData({ presetNames: [], presetInput: '' }) },
+  importExcel() {
+    wx.chooseMessageFile({
+      count: 1,
+      type: 'file',
+      success: res => {
+        const filePath = res.tempFiles[0].path
+        wx.getFileSystemManager().readFile({
+          filePath,
+          success: data => {
+            try {
+              const XLSX = require('../lib/xlsx.min.js')
+              const workbook = XLSX.read(data.buffer, { type: 'buffer' })
+              const ws = workbook.Sheets[workbook.SheetNames[0]]
+              const range = XLSX.utils.decode_range(ws['!ref'] || 'A1:A1')
+              const names = []
+              for (let R = range.s.r; R <= range.e.r; R++) {
+                const cell = ws[XLSX.utils.encode_cell({ r: R, c: 0 })]
+                if (cell && cell.v) {
+                  const val = String(cell.v).trim()
+                  if (val) names.push(val)
+                }
+              }
+              if (names.length === 0) {
+                return wx.showToast({ title: '未提取到名单', icon: 'none' })
+              }
+              const unique = [...new Set([...this.data.presetNames, ...names].filter(Boolean))]
+              this.setData({ presetNames: unique })
+              wx.showToast({ title: `成功导入${names.length}人`, icon: 'success' })
+            } catch (e) {
+              console.error('importExcel error', e)
+              wx.showToast({ title: '解析失败，请检查文件格式', icon: 'none' })
+            }
+          },
+          fail: err => {
+            wx.showToast({ title: '读取文件失败', icon: 'none' })
+          }
+        })
+      },
+      fail: err => {
+        // 用户取消选择，不提示
+      }
+    })
+  },
   removePreset(e) {
     const idx = e.currentTarget.dataset.idx
     this.setData({ presetNames: this.data.presetNames.filter((_,i)=>i!==idx) })
