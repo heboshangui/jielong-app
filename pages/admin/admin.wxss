@@ -1,17 +1,23 @@
 page { background: #f0f4f8; font-family: 'PingFang SC', sans-serif; }
-.container { padding: 24rpx; }
+.container { padding: 24rpx; padding-bottom: 100rpx; }
 .stat-row { display: flex; align-items: center; gap: 24rpx; margin-bottom: 20rpx; }
-.stat-card { background: linear-gradient(135deg, #07c160, #06ad56); border-radius: 20rpx; padding: 32rpx; flex: 1; text-align: center; }
+.stat-card { background: linear-gradient(135deg, #07c160, #06ad56); border-radius: 20rpx; padding: 32rpx; text-align: center; min-width: 200rpx; }
 .stat-num { font-size: 52rpx; font-weight: 700; color: white; display: block; }
 .stat-label { font-size: 24rpx; color: rgba(255,255,255,0.85); display: block; margin-top: 4rpx; }
-.stat-actions { display: flex; flex-direction: column; gap: 12rpx; }
-.stat-actions button { background: #f0f4f8; color: #555; font-size: 24rpx; }
-.btn-share { background: #07c160; color: white; border-radius: 16rpx; font-size: 28rpx; padding: 20rpx 0; border: none; margin-bottom: 20rpx; }
+.stat-info { flex: 1; }
+.progress-bar { height: 12rpx; background: #e8e8e8; border-radius: 6rpx; overflow: hidden; margin-bottom: 8rpx; }
+.progress-fill { height: 100%; background: #07c160; border-radius: 6rpx; transition: width 0.3s; }
+.remain { font-size: 26rpx; color: #888; }
+.action-row { display: flex; gap: 16rpx; margin-bottom: 20rpx; }
+.action-btn { flex: 1; background: white; border-radius: 14rpx; padding: 20rpx 0; text-align: center; font-size: 26rpx; font-weight: 600; color: #555; box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.06); }
+.info-row { background: white; border-radius: 14rpx; padding: 20rpx; margin-bottom: 20rpx; display: flex; gap: 24rpx; font-size: 26rpx; color: #666; }
 .search-row { margin-bottom: 20rpx; }
 .search-input { background: white; border-radius: 12rpx; padding: 16rpx 20rpx; font-size: 28rpx; }
-.list-title { font-size: 26rpx; color: #888; font-weight: 600; margin-bottom: 16rpx; padding-left: 4rpx; }
+.section-title { font-size: 26rpx; color: #888; font-weight: 600; margin-bottom: 16rpx; padding-left: 4rpx; }
 .record-item { background: white; border-radius: 14rpx; padding: 24rpx; margin-bottom: 14rpx; }
-.record-name { font-size: 32rpx; font-weight: 600; color: #1a1a1a; margin-bottom: 6rpx; }
-.record-meta { font-size: 26rpx; color: #888; margin-bottom: 4rpx; }
-.record-time { font-size: 24rpx; color: #07c160; background: #e8f5e9; display: inline-block; padding: 4rpx 12rpx; border-radius: 20rpx; margin-top: 6rpx; }
-.empty { text-align: center; color: #bbb; padding: 60rpx 0; }
+.record-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10rpx; }
+.record-name { font-size: 32rpx; font-weight: 600; color: #1a1a1a; }
+.record-badge { background: #e8f5e9; color: #07c160; border-radius: 20rpx; padding: 4rpx 16rpx; font-size: 24rpx; }
+.record-detail { display: flex; flex-wrap: wrap; gap: 8rpx 24rpx; font-size: 26rpx; color: #666; margin-bottom: 8rpx; }
+.record-time { font-size: 24rpx; color: #aaa; }
+.empty { text-align: center; color: #bbb; padding: 80rpx 0; }
