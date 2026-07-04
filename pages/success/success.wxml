@@ -1,0 +1,6 @@
+<view class="container">
+  <view class="success-icon">✓</view>
+  <view class="title">提交成功！</view>
+  <view class="subtitle">感谢您完成接龙确认</view>
+  <view class="form-name">{{title}}</view>
+</view>
