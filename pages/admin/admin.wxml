@@ -16,9 +16,14 @@
     <view class="action-btn export" bindtap="exportExcel">📥 导出Excel</view>
   </view>
 
+  <view class="action-row" wx:if="{{form.formType==='checkin'}}">
+    <view class="action-btn history" bindtap="goHistory">📊 打卡历史</view>
+  </view>
+
   <view class="info-row" wx:if="{{form.formType==='checkin'}}">
     <text>📅 {{form.startDate}} 至 {{form.endDate}}</text>
     <text wx:if="{{form.reminderEnabled}}">⏰ {{form.reminderTime}} 提醒</text>
+    <text wx:if="{{form.allowMakeup}}">✅ 允许补卡</text>
   </view>
 
   <view class="search-row">
@@ -37,7 +42,7 @@
       <text wx:if="{{item.data['联系电话']}}">📞 {{item.data['联系电话']}}</text>
       <text wx:if="{{item.data['是否已认真阅读并对幼儿负责']}}">✔️ {{item.data['是否已认真阅读并对幼儿负责']}}</text>
     </view>
-    <view class="record-time">{{new Date(item.submittedAt).toLocaleString('zh-CN')}}</view>
+    <view class="record-time">{{item.submittedAt ? new Date(item.submittedAt).toLocaleString('zh-CN') : ''}}</view>
   </view>
 
   <view wx:if="{{responses.length===0}}" class="empty">暂无数据</view>
