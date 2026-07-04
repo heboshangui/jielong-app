@@ -1,5 +1,5 @@
 Page({
-  data: { form: null, filled: {}, draftSaved: false },
+  data: { form: null, filled: {}, draftSaved: false, showSignModal: false, signFieldId: null },
 
   onLoad(opt) {
     const id = opt.id
@@ -37,20 +37,71 @@ Page({
     }})
   },
 
+  // 打开签名板
   openSign(e) {
     const id = e.currentTarget.dataset.id
-    wx.showModal({
-      title: '手写签名',
-      editable: true,
-      placeholderText: '请在此区域手写签名',
+    this.setData({ showSignModal: true, signFieldId: id, signPath: '' })
+    // 等待画布渲染后初始化
+    setTimeout(() => {
+      const ctx = wx.createCanvasContext('signCanvas')
+      this.signCtx = ctx
+      this.signPoints = []
+      ctx.setStrokeStyle('#333')
+      ctx.setLineWidth(3)
+      ctx.setLineCap('round')
+      ctx.setLineJoin('round')
+      ctx.clearRect(0, 0, 300, 200)
+      ctx.stroke()
+      ctx.draw()
+    }, 100)
+  },
+
+  // 触摸开始
+  signTouchStart(e) {
+    const { x, y } = e.touches[0]
+    this.signPoints = [{ x, y }]
+    this.signCtx.moveTo(x, y)
+  },
+
+  // 触摸移动
+  signTouchMove(e) {
+    const { x, y } = e.touches[0]
+    this.signPoints.push({ x, y })
+    this.signCtx.lineTo(x, y)
+    this.signCtx.stroke()
+    this.signCtx.draw(true)
+  },
+
+  // 清空签名
+  signClear() {
+    this.signPoints = []
+    this.signCtx.clearRect(0, 0, 300, 200)
+    this.signCtx.setStrokeStyle('#333')
+    this.signCtx.setLineWidth(3)
+    this.signCtx.stroke()
+    this.signCtx.draw()
+  },
+
+  // 确认签名：把画布内容转成图片
+  signConfirm() {
+    const fieldId = this.data.signFieldId
+    wx.canvasToTempFilePath({
+      canvasId: 'signCanvas',
       success: res => {
-        if (res.content) {
-          // 签名板不支持图片，取文本作为签名
-          this.setData({ ['filled.'+id]: res.content || '(已签名)' })
-          this.saveDraft()
-        }
+        const tempFilePath = res.tempFilePath
+        this.setData({ ['filled.'+fieldId]: tempFilePath, showSignModal: false })
+        this.saveDraft()
+        wx.showToast({ title: '签名已保存', icon: 'success' })
+      },
+      fail: err => {
+        wx.showToast({ title: '签名失败', icon: 'none' })
       }
     })
+  },
+
+  // 取消签名
+  signCancel() {
+    this.setData({ showSignModal: false })
   },
 
   saveDraft() {
