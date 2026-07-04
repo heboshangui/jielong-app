@@ -1,0 +1,26 @@
+<view class="container">
+  <view class="header">
+    <text class="title">班级接龙</text>
+    <text class="subtitle">安全告知书 · 接龙确认 · 一键导出</text>
+  </view>
+
+  <button class="btn-create" bindtap="goCreate">+ 创建接龙表单</button>
+
+  <view class="section-title">我的表单</view>
+
+  <view wx:if="{{forms.length === 0}}" class="empty">
+    <text>暂无表单，点击上方按钮创建</text>
+  </view>
+
+  <view wx:for="{{forms}}" wx:key="id" class="form-card">
+    <view class="form-info">
+      <text class="form-title">{{item.title}}</text>
+      <text class="form-meta">截止：{{item.deadline}}</text>
+      <text class="form-stat">{{item.completedCount || 0}}/{{item.totalCount}} 人已完成</text>
+    </view>
+    <view class="form-actions">
+      <button size="mini" data-id="{{item.id}}" bindtap="goAdmin">管理</button>
+      <button size="mini" data-id="{{item.id}}" bindtap="copyLink">分享</button>
+    </view>
+  </view>
+</view>
