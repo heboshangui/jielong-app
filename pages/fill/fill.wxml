@@ -2,40 +2,38 @@
   <view class="header">
     <text class="form-title">{{form.title}}</text>
     <view class="desc" wx:if="{{form.description}}">{{form.description}}</view>
-    <view class="deadline" wx:if="{{form.deadline}}">⏰ 截止：{{form.deadline}}</view>
-    <view class="checkin-range" wx:if="{{form.formType==='checkin'}}">
-      📅 {{form.startDate}} 至 {{form.endDate}}
-    </view>
+    <view class="deadline" wx:if="{{form.deadline && form.formType==='sign'}}">⏰ 截止：{{form.deadline}}</view>
+    <view class="checkin-range" wx:if="{{form.formType==='checkin'}}">📅 {{form.startDate}} 至 {{form.endDate}}</view>
   </view>
 
   <view class="form-body">
     <block wx:for="{{form.fields}}" wx:key="id">
-      <!-- 单行文本 -->
+      <!-- 文本 -->
       <view class="field" wx:if="{{item.type==='text'}}">
         <view class="field-label">{{item.name}}<text class="red" wx:if="{{item.required}}"> *</text></view>
-        <input class="field-input" placeholder="请输入{{item.name}}" value="{{filled[item.id]}}" bindinput="onTextInput" data-id="{{item.id}}" />
+        <input class="field-input" placeholder="请输入{{item.name}}" value="{{filled[item.id]}}" data-id="{{item.id}}" bindinput="onTextInput" />
       </view>
 
       <!-- 手机号 -->
       <view class="field" wx:if="{{item.type==='tel'}}">
         <view class="field-label">{{item.name}}<text class="red" wx:if="{{item.required}}"> *</text></view>
-        <input class="field-input" type="number" placeholder="请输入手机号" value="{{filled[item.id]}}" bindinput="onTextInput" data-id="{{item.id}}" />
+        <input class="field-input" type="number" placeholder="请输入手机号" value="{{filled[item.id]}}" data-id="{{item.id}}" bindinput="onTextInput" />
       </view>
 
-      <!-- 单项选择 -->
+      <!-- 单选 -->
       <view class="field" wx:if="{{item.type==='radio' || item.type==='yesno'}}">
         <view class="field-label">{{item.name}}<text class="red" wx:if="{{item.required}}"> *</text></view>
-        <radio-group bindchange="onRadioChange" data-id="{{item.id}}">
+        <radio-group data-id="{{item.id}}" bindchange="onRadioChange">
           <label class="radio-item" wx:for="{{item.options}}" wx:key="*this" wx:for-item="opt">
             <radio value="{{opt}}" color="#07c160"/> {{opt}}
           </label>
         </radio-group>
       </view>
 
-      <!-- 多项选择 -->
+      <!-- 多选 -->
       <view class="field" wx:if="{{item.type==='multi'}}">
         <view class="field-label">{{item.name}}<text class="red" wx:if="{{item.required}}"> *</text></view>
-        <checkbox-group bindchange="onMultiChange" data-id="{{item.id}}">
+        <checkbox-group data-id="{{item.id}}" bindchange="onMultiChange">
           <label class="radio-item" wx:for="{{item.options}}" wx:key="*this" wx:for-item="opt">
             <checkbox value="{{opt}}" color="#07c160"/> {{opt}}
           </label>
@@ -45,7 +43,7 @@
       <!-- 图片上传 -->
       <view class="field" wx:if="{{item.type==='image'}}">
         <view class="field-label">{{item.name}}<text class="red" wx:if="{{item.required}}"> *</text></view>
-        <view class="image-upload-area" bindtap="chooseImage" data-id="{{item.id}}">
+        <view class="image-upload-area" data-id="{{item.id}}" bindtap="chooseImage">
           <image wx:if="{{filled[item.id]}}" src="{{filled[item.id]}}" mode="aspectFill" class="uploaded-img"/>
           <view wx:else class="upload-placeholder">
             <text class="upload-icon">+</text>
@@ -54,14 +52,43 @@
         </view>
       </view>
 
-      <!-- 手写签名 -->
+      <!-- 签名板 -->
       <view class="field" wx:if="{{item.type==='signature'}}">
         <view class="field-label">{{item.name}}<text class="red" wx:if="{{item.required}}"> *</text></view>
-        <canvas canvas-id="sign_{{item.id}}" class="sign-canvas" bindtap="openSign" data-id="{{item.id}}"></canvas>
-        <view class="sign-tip">点击画布签名</view>
+        <view class="sign-preview" data-id="{{item.id}}" bindtap="openSign">
+          <image wx:if="{{filled[item.id]}}" src="{{filled[item.id]}}" class="sign-img" mode="aspectFit"/>
+          <view wx:else class="sign-placeholder">
+            <text class="sign-icon">✍️</text>
+            <text class="sign-text">点击签名</text>
+          </view>
+        </view>
       </view>
     </block>
 
     <button class="btn-submit" bindtap="submit">提交{{form.formType==='checkin'?'打卡':'接龙'}}</button>
+  </view>
+</view>
+
+<!-- 签名弹窗 -->
+<view class="sign-modal" wx:if="{{showSignModal}}">
+  <view class="sign-modal-mask" bindtap="signCancel"></view>
+  <view class="sign-modal-content">
+    <view class="sign-modal-header">
+      <text class="sign-modal-title">✍️ 请在手写签名</text>
+    </view>
+    <view class="sign-canvas-wrap">
+      <canvas
+        canvas-id="signCanvas"
+        class="sign-canvas"
+        disable-scroll="true"
+        bindtouchstart="signTouchStart"
+        bindtouchmove="signTouchMove"
+      ></canvas>
+    </view>
+    <view class="sign-modal-btns">
+      <view class="sign-btn clear" bindtap="signClear">清空</view>
+      <view class="sign-btn cancel" bindtap="signCancel">取消</view>
+      <view class="sign-btn confirm" bindtap="signConfirm">确认</view>
+    </view>
   </view>
 </view>
