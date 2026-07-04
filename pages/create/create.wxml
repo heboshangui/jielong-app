@@ -1,30 +1,134 @@
 <view class="container">
-  <view class="section">
-    <view class="label">表单标题</view>
-    <input class="input" placeholder="如：大六班《2026暑假安全致家长一封信》" value="{{title}}" bindinput="onTitleInput" />
-  </view>
-  <view class="section">
-    <view class="label">正文说明</view>
-    <textarea class="textarea" placeholder="请如实填写以下选项并手写签名" value="{{description}}" bindinput="onDescInput" />
-  </view>
-  <view class="section">
-    <view class="label">截止时间</view>
-    <picker mode="datetime" bindchange="onDeadlineChange" value="{{deadline}}">
-      <view class="picker">{{deadline || '不设置截止时间'}}</view>
-    </picker>
-  </view>
-  <view class="section">
-    <view class="label">班级总人数</view>
-    <input class="input" type="number" value="{{totalCount}}" bindinput="onCountChange" />
-  </view>
-  <view class="section">
-    <view class="label">表单字段（默认）</view>
-    <view class="field-list">
-      <view wx:for="{{fields}}" wx:key="name" class="field-item">
-        <text>{{item.name}}</text>
-        <text wx:if="{{item.required}}" class="required">*</text>
-      </view>
+  <!-- 表单类型选择 -->
+  <view class="type-row">
+    <view class="type-card {{formType==='sign'?'active':''}}" data-type="sign" bindtap="setFormType">
+      <text class="type-icon">📝</text>
+      <text class="type-name">填表接龙</text>
+      <text class="type-desc">仅接龙反馈一次</text>
+    </view>
+    <view class="type-card {{formType==='checkin'?'active':''}}" data-type="checkin" bindtap="setFormType">
+      <text class="type-icon">✅</text>
+      <text class="type-name">打卡接龙</text>
+      <text class="type-desc">每天可接龙一次</text>
     </view>
   </view>
-  <button class="btn-submit" bindtap="submit">创建表单</button>
+
+  <view class="card">
+    <view class="field-row">
+      <text class="field-label">标题</text>
+      <input class="input" placeholder="如：大六班《2026暑假安全致家长一封信》" value="{{title}}" bindinput="onTitleInput" />
+    </view>
+    <view class="field-row">
+      <text class="field-label">说明</text>
+      <textarea class="textarea" placeholder="请如实填写以下选项并手写签名" value="{{description}}" bindinput="onDescInput" />
+    </view>
+  </view>
+
+  <!-- 打卡设置 -->
+  <view class="card" wx:if="{{formType==='checkin'}}">
+    <view class="section-title">打卡设置</view>
+    <view class="field-row">
+      <text class="field-label">开始时间</text>
+      <picker mode="date" value="{{startDate}}" bindchange="onStartChange">
+        <view class="picker-val">{{startDate}}</view>
+      </picker>
+    </view>
+    <view class="field-row">
+      <text class="field-label">结束时间</text>
+      <picker mode="date" value="{{endDate}}" bindchange="onEndChange">
+        <view class="picker-val">{{endDate}}</view>
+      </picker>
+    </view>
+    <view class="field-row">
+      <text class="field-label">定时提醒</text>
+      <switch checked="{{reminderEnabled}}" bindchange="toggleReminder" color="#07c160"/>
+    </view>
+    <view class="reminder-days" wx:if="{{reminderEnabled}}">
+      <view class="field-label mb8">提醒日期</view>
+      <view class="day-grid">
+        <view class="day-btn {{reminderDays.includes('1')?'on':''}}" data-day="1" bindtap="toggleDay">一</view>
+        <view class="day-btn {{reminderDays.includes('2')?'on':''}}" data-day="2" bindtap="toggleDay">二</view>
+        <view class="day-btn {{reminderDays.includes('3')?'on':''}}" data-day="3" bindtap="toggleDay">三</view>
+        <view class="day-btn {{reminderDays.includes('4')?'on':''}}" data-day="4" bindtap="toggleDay">四</view>
+        <view class="day-btn {{reminderDays.includes('5')?'on':''}}" data-day="5" bindtap="toggleDay">五</view>
+        <view class="day-btn {{reminderDays.includes('6')?'on':''}}" data-day="6" bindtap="toggleDay">六</view>
+        <view class="day-btn {{reminderDays.includes('7')?'on':''}}" data-day="7" bindtap="toggleDay">日</view>
+      </view>
+      <view class="field-row mt12">
+        <text class="field-label">提醒时间</text>
+        <picker mode="time" value="{{reminderTime}}" bindchange="onReminderTimeChange">
+          <view class="picker-val">{{reminderTime}}</view>
+        </picker>
+      </view>
+    </view>
+    <view class="field-row">
+      <text class="field-label">允许补卡</text>
+      <switch checked="{{allowMakeup}}" bindchange="toggleMakeup" color="#07c160"/>
+    </view>
+    <view class="field-row">
+      <text class="field-label">缓存填写</text>
+      <switch checked="{{allowCache}}" bindchange="toggleCache" color="#07c160"/>
+    </view>
+  </view>
+
+  <!-- 填表接龙设置 -->
+  <view class="card" wx:if="{{formType==='sign'}}">
+    <view class="field-row">
+      <text class="field-label">接龙截止</text>
+      <picker mode="datetime" value="{{deadline}}" bindchange="onDeadlineChange">
+        <view class="picker-val">{{deadline}}</view>
+      </picker>
+    </view>
+    <view class="field-row">
+      <text class="field-label">班级总人数</text>
+      <input class="input small" type="number" value="{{totalCount}}" bindinput="onCountChange" />
+    </view>
+  </view>
+
+  <!-- 预设名单 -->
+  <view class="card">
+    <view class="section-title">预设名单</view>
+    <view class="preset-input-row">
+      <textarea class="textarea small" placeholder="输入名单，用逗号或换行分隔" value="{{presetInput}}" bindinput="onPresetInput" auto-height/>
+      <view class="preset-btns">
+        <view class="preset-btn" bindtap="addPresetNames">添加</view>
+        <view class="preset-btn" bindtap="clearPreset">清空</view>
+      </view>
+    </view>
+    <view class="preset-tags" wx:if="{{presetNames.length>0}}">
+      <view class="preset-tag" wx:for="{{presetNames}}" wx:key="*this">
+        {{item}} <text class="tag-x" data-idx="{{index}}" bindtap="removePreset">×</text>
+      </view>
+    </view>
+    <view class="preset-count">{{presetNames.length}}人</view>
+  </view>
+
+  <!-- 填表项目 -->
+  <view class="card">
+    <view class="section-title">填表项目</view>
+    <view class="field-list">
+      <view class="field-item" wx:for="{{fields}}" wx:key="id">
+        <view class="field-item-header">
+          <text class="field-item-name">{{item.name}}</text>
+          <view class="field-item-actions">
+            <text class="field-action {{item.required?'on':''}}" data-idx="{{index}}" bindtap="toggleFieldRequired">必填</text>
+            <text class="field-action {{item.public?'on':''}}" data-idx="{{index}}" bindtap="toggleFieldPublic">公开</text>
+            <text class="field-action del" data-idx="{{index}}" bindtap="removeField">删除</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="add-field-grid">
+      <view class="add-field-btn" data-type="text" bindtap="addField">📝 单行</view>
+      <view class="add-field-btn" data-type="tel" bindtap="addField">📞 手机</view>
+      <view class="add-field-btn" data-type="radio" bindtap="addField">⭕ 单选</view>
+      <view class="add-field-btn" data-type="yesno" bindtap="addField">✔️ 是否</view>
+      <view class="add-field-btn" data-type="sign" bindtap="addField">✍️ 签名</view>
+      <view class="add-field-btn" data-type="image" bindtap="addField">🖼️ 图片</view>
+      <view class="add-field-btn" data-type="video" bindtap="addField">🎬 视频</view>
+      <view class="add-field-btn" data-type="doc" bindtap="addField">📄 文档</view>
+    </view>
+  </view>
+
+  <button class="btn-submit" bindtap="submit">立即发布</button>
 </view>
