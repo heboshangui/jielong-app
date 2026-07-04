@@ -1,0 +1,22 @@
+page { background: #f0f4f8; font-family: 'PingFang SC', sans-serif; }
+.container { padding: 24rpx; }
+.header { text-align: center; padding: 40rpx 0 30rpx; }
+.title { font-size: 48rpx; font-weight: 700; color: #1a1a1a; display: block; }
+.subtitle { font-size: 24rpx; color: #888; margin-top: 8rpx; display: block; }
+.btn-create {
+  background: #07c160; color: white; border-radius: 24rpx;
+  font-size: 32rpx; font-weight: 600; padding: 28rpx 0;
+  border: none; margin-bottom: 40rpx;
+}
+.section-title { font-size: 28rpx; color: #888; font-weight: 600; margin-bottom: 20rpx; padding-left: 8rpx; }
+.empty { text-align: center; color: #bbb; padding: 60rpx 0; font-size: 28rpx; }
+.form-card {
+  background: white; border-radius: 20rpx; padding: 28rpx; margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.06);
+}
+.form-info { flex: 1; }
+.form-title { font-size: 32rpx; font-weight: 600; color: #1a1a1a; display: block; margin-bottom: 8rpx; }
+.form-meta { font-size: 24rpx; color: #888; display: block; margin-bottom: 6rpx; }
+.form-stat { font-size: 26rpx; color: #07c160; font-weight: 600; display: block; margin-top: 8rpx; }
+.form-actions { display: flex; gap: 16rpx; margin-top: 16rpx; }
+.form-actions button { background: #f0f4f8; color: #555; font-size: 24rpx; }
