@@ -1,30 +1,34 @@
 Page({
   data: { form: null, filled: {}, draftSaved: false },
+
   onLoad(opt) {
     const id = opt.id
     const forms = wx.getStorageSync('myForms') || []
     const form = forms.find(f => f.id === id)
     if (!form) return wx.showToast({ title: '表单不存在', icon: 'none' })
     this.setData({ form })
-    // 加载缓存
     const cache = wx.getStorageSync('draft_' + id)
     if (cache) this.setData({ filled: cache, draftSaved: true })
   },
+
   onTextInput(e) {
     const id = e.currentTarget.dataset.id
     this.setData({ ['filled.'+id]: e.detail.value })
     this.saveDraft()
   },
+
   onRadioChange(e) {
     const id = e.currentTarget.dataset.id
     this.setData({ ['filled.'+id]: e.detail.value })
     this.saveDraft()
   },
+
   onMultiChange(e) {
     const id = e.currentTarget.dataset.id
     this.setData({ ['filled.'+id]: e.detail.value.join(',') })
     this.saveDraft()
   },
+
   chooseImage(e) {
     const id = e.currentTarget.dataset.id
     wx.chooseMedia({ count: 1, mediaType: ['image'], success: res => {
@@ -32,20 +36,36 @@ Page({
       this.saveDraft()
     }})
   },
+
+  openSign(e) {
+    const id = e.currentTarget.dataset.id
+    wx.showModal({
+      title: '手写签名',
+      editable: true,
+      placeholderText: '请在此区域手写签名',
+      success: res => {
+        if (res.content) {
+          // 签名板不支持图片，取文本作为签名
+          this.setData({ ['filled.'+id]: res.content || '(已签名)' })
+          this.saveDraft()
+        }
+      }
+    })
+  },
+
   saveDraft() {
-    if (this.data.form.allowCache) {
+    if (this.data.form && this.data.form.allowCache) {
       wx.setStorageSync('draft_' + this.data.form.id, this.data.filled)
     }
   },
+
   submit() {
     const { form, filled } = this.data
-    // 验证必填
     for (const f of form.fields) {
       if (f.required && !filled[f.id]) {
         return wx.showToast({ title: `请填写${f.name}`, icon: 'none' })
       }
     }
-    // 保存
     const forms = wx.getStorageSync('myForms') || []
     const idx = forms.findIndex(f => f.id === form.id)
     if (idx >= 0) {
