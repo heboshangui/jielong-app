@@ -1,0 +1,16 @@
+<view class="container">
+  <view wx:if="{{forms.length === 0}}" class="empty">
+    <text>暂无表单</text>
+  </view>
+  <view wx:for="{{forms}}" wx:key="id" class="form-card">
+    <view class="form-info">
+      <text class="form-title">{{item.title}}</text>
+      <text class="form-meta">截止：{{item.deadline || '不限'}}</text>
+      <text class="form-stat">{{item.completedCount || 0}}/{{item.totalCount}} 人已完成</text>
+    </view>
+    <view class="form-actions">
+      <button size="mini" data-id="{{item.id}}" bindtap="goAdmin">管理</button>
+      <button size="mini" data-id="{{item.id}}" bindtap="copyLink">分享</button>
+    </view>
+  </view>
+</view>
