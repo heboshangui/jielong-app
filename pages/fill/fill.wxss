@@ -1,0 +1,16 @@
+page { background: #f0f4f8; font-family: 'PingFang SC', sans-serif; }
+.container { padding: 24rpx; }
+.header { background: white; border-radius: 16rpx; padding: 32rpx 28rpx; margin-bottom: 20rpx; }
+.form-title { font-size: 36rpx; font-weight: 700; color: #1a1a1a; display: block; margin-bottom: 12rpx; }
+.desc { font-size: 28rpx; color: #666; background: #f8f8f8; padding: 16rpx; border-radius: 10rpx; margin-top: 12rpx; }
+.deadline { font-size: 26rpx; color: #856404; background: #fff3cd; padding: 10rpx 16rpx; border-radius: 8rpx; margin-top: 12rpx; display: inline-block; }
+.form-body { background: white; border-radius: 16rpx; padding: 28rpx; }
+.field { margin-bottom: 32rpx; }
+.field-label { font-size: 28rpx; font-weight: 600; color: #333; margin-bottom: 12rpx; display: block; }
+.red { color: #ff4d4f; }
+.field-input { border: 2rpx solid #e8e8e8; border-radius: 12rpx; padding: 20rpx 24rpx; font-size: 30rpx; }
+.radio-item { display: flex; align-items: center; gap: 12rpx; font-size: 28rpx; color: #333; padding: 8rpx 0; }
+.btn-submit {
+  background: #07c160; color: white; border-radius: 24rpx;
+  font-size: 34rpx; font-weight: 600; padding: 28rpx 0; border: none; margin-top: 20rpx;
+}
