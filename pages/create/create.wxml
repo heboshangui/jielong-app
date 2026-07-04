@@ -93,6 +93,7 @@
       <view class="preset-btns">
         <view class="preset-btn" bindtap="addPresetNames">添加</view>
         <view class="preset-btn" bindtap="clearPreset">清空</view>
+        <view class="preset-btn import" bindtap="importExcel">📥 Excel导入</view>
       </view>
     </view>
     <view class="preset-tags" wx:if="{{presetNames.length>0}}">
