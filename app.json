@@ -5,7 +5,8 @@
     "pages/fill/fill",
     "pages/success/success",
     "pages/admin/admin",
-    "pages/list/list"
+    "pages/list/list",
+    "pages/history/history"
   ],
   "window": {
     "backgroundTextStyle": "light",
