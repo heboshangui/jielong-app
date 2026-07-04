@@ -1,14 +1,49 @@
 page { background: #f0f4f8; font-family: 'PingFang SC', sans-serif; }
-.container { padding: 24rpx; }
-.section { background: white; border-radius: 16rpx; padding: 28rpx; margin-bottom: 20rpx; }
-.label { font-size: 28rpx; font-weight: 600; color: #333; margin-bottom: 12rpx; display: block; }
-.input { font-size: 30rpx; color: #333; }
-.textarea { font-size: 30rpx; color: #333; width: 100%; min-height: 120rpx; border: 1rpx solid #eee; border-radius: 10rpx; padding: 12rpx; box-sizing: border-box; }
-.picker { font-size: 30rpx; color: #333; padding: 8rpx 0; }
-.field-list { display: flex; flex-direction: column; gap: 16rpx; }
-.field-item { font-size: 28rpx; color: #555; padding: 12rpx 16rpx; background: #f8faf8; border-radius: 10rpx; display: flex; gap: 8rpx; }
-.required { color: #ff4d4f; }
+.container { padding: 24rpx; padding-bottom: 120rpx; }
+.type-row { display: flex; gap: 20rpx; margin-bottom: 20rpx; }
+.type-card {
+  flex: 1; background: white; border-radius: 16rpx; padding: 28rpx 20rpx; text-align: center;
+  border: 3rpx solid transparent; transition: all 0.2s;
+}
+.type-card.active { border-color: #07c160; background: #f0fdf4; }
+.type-icon { display: block; font-size: 48rpx; margin-bottom: 8rpx; }
+.type-name { display: block; font-size: 28rpx; font-weight: 700; color: #333; margin-bottom: 4rpx; }
+.type-desc { display: block; font-size: 22rpx; color: #999; }
+.card { background: white; border-radius: 16rpx; padding: 28rpx; margin-bottom: 20rpx; }
+.section-title { font-size: 28rpx; font-weight: 700; color: #333; margin-bottom: 20rpx; display: block; }
+.field-row { display: flex; align-items: center; justify-content: space-between; padding: 16rpx 0; border-bottom: 1rpx solid #f5f5f5; }
+.field-row:last-child { border-bottom: none; }
+.field-label { font-size: 28rpx; color: #555; flex-shrink: 0; margin-right: 16rpx; }
+.input { flex: 1; text-align: right; font-size: 28rpx; color: #333; }
+.input.small { width: 120rpx; }
+.textarea { font-size: 28rpx; color: #333; width: 100%; min-height: 80rpx; border: 1rpx solid #eee; border-radius: 10rpx; padding: 12rpx; box-sizing: border-box; margin-top: 8rpx; }
+.textarea.small { min-height: 60rpx; }
+.picker-val { font-size: 28rpx; color: #07c160; font-weight: 600; }
+.reminder-days { padding: 12rpx 0; }
+.mb8 { margin-bottom: 8rpx; }
+.mt12 { margin-top: 12rpx; }
+.day-grid { display: flex; gap: 12rpx; flex-wrap: wrap; }
+.day-btn { width: 64rpx; height: 64rpx; border-radius: 50%; background: #f0f0f0; color: #999; font-size: 24rpx; display: flex; align-items: center; justify-content: center; }
+.day-btn.on { background: #07c160; color: white; }
+.preset-input-row { display: flex; gap: 12rpx; align-items: flex-start; }
+.preset-btns { display: flex; flex-direction: column; gap: 8rpx; flex-shrink: 0; }
+.preset-btn { background: #e8f5e9; color: #07c160; border-radius: 8rpx; padding: 10rpx 16rpx; font-size: 24rpx; white-space: nowrap; }
+.preset-tags { display: flex; flex-wrap: wrap; gap: 12rpx; margin-top: 16rpx; }
+.preset-tag { background: #e8f5e9; color: #07c160; border-radius: 20rpx; padding: 6rpx 16rpx; font-size: 26rpx; }
+.tag-x { margin-left: 8rpx; color: #ff4d4f; }
+.preset-count { font-size: 24rpx; color: #999; margin-top: 12rpx; text-align: right; }
+.field-list { margin-bottom: 20rpx; }
+.field-item { padding: 16rpx 0; border-bottom: 1rpx solid #f5f5f5; }
+.field-item-header { display: flex; align-items: center; justify-content: space-between; }
+.field-item-name { font-size: 28rpx; color: #333; font-weight: 600; }
+.field-item-actions { display: flex; gap: 16rpx; }
+.field-action { font-size: 22rpx; color: #999; background: #f5f5f5; padding: 4rpx 12rpx; border-radius: 8rpx; }
+.field-action.on { background: #e8f5e9; color: #07c160; }
+.field-action.del { color: #ff4d4f; background: #fff0f0; }
+.add-field-grid { display: flex; flex-wrap: wrap; gap: 12rpx; }
+.add-field-btn { background: #f8f8f8; color: #555; border-radius: 10rpx; padding: 14rpx 18rpx; font-size: 24rpx; border: 1rpx solid #eee; }
 .btn-submit {
-  background: #07c160; color: white; border-radius: 24rpx; font-size: 34rpx; font-weight: 600;
-  padding: 28rpx 0; border: none; margin-top: 20rpx;
+  position: fixed; bottom: 40rpx; left: 24rpx; right: 24rpx;
+  background: #07c160; color: white; border-radius: 24rpx; font-size: 34rpx; font-weight: 700;
+  padding: 28rpx 0; border: none;
 }
