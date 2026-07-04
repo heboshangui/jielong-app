@@ -3,36 +3,65 @@
     <text class="form-title">{{form.title}}</text>
     <view class="desc" wx:if="{{form.description}}">{{form.description}}</view>
     <view class="deadline" wx:if="{{form.deadline}}">⏰ 截止：{{form.deadline}}</view>
+    <view class="checkin-range" wx:if="{{form.formType==='checkin'}}">
+      📅 {{form.startDate}} 至 {{form.endDate}}
+    </view>
   </view>
 
   <view class="form-body">
-    <view class="field">
-      <view class="field-label">幼儿姓名 <text class="red">*</text></view>
-      <input class="field-input" placeholder="请输入幼儿姓名" bindinput="onNameInput" value="{{filled.幼儿姓名}}" />
-    </view>
+    <block wx:for="{{form.fields}}" wx:key="id">
+      <!-- 单行文本 -->
+      <view class="field" wx:if="{{item.type==='text'}}">
+        <view class="field-label">{{item.name}}<text class="red" wx:if="{{item.required}}"> *</text></view>
+        <input class="field-input" placeholder="请输入{{item.name}}" value="{{filled[item.id]}}" bindinput="onTextInput" data-id="{{item.id}}" />
+      </view>
 
-    <view class="field">
-      <view class="field-label">是否已认真阅读并对幼儿负责 <text class="red">*</text></view>
-      <radio-group bindchange="onRadioChange">
-        <label class="radio-item"><radio value="是" color="#07c160" /> 我已认真阅读并会对幼儿负责</label>
-      </radio-group>
-    </view>
+      <!-- 手机号 -->
+      <view class="field" wx:if="{{item.type==='tel'}}">
+        <view class="field-label">{{item.name}}<text class="red" wx:if="{{item.required}}"> *</text></view>
+        <input class="field-input" type="number" placeholder="请输入手机号" value="{{filled[item.id]}}" bindinput="onTextInput" data-id="{{item.id}}" />
+      </view>
 
-    <view class="field">
-      <view class="field-label">家长/监护人 <text class="red">*</text></view>
-      <input class="field-input" placeholder="请输入家长或监护人姓名" bindinput="onGuardianInput" value="{{filled.家长/监护人}}" />
-    </view>
+      <!-- 单项选择 -->
+      <view class="field" wx:if="{{item.type==='radio' || item.type==='yesno'}}">
+        <view class="field-label">{{item.name}}<text class="red" wx:if="{{item.required}}"> *</text></view>
+        <radio-group bindchange="onRadioChange" data-id="{{item.id}}">
+          <label class="radio-item" wx:for="{{item.options}}" wx:key="*this" wx:for-item="opt">
+            <radio value="{{opt}}" color="#07c160"/> {{opt}}
+          </label>
+        </radio-group>
+      </view>
 
-    <view class="field">
-      <view class="field-label">联系电话 <text class="red">*</text></view>
-      <input class="field-input" type="number" placeholder="请输入联系电话" bindinput="onTelInput" value="{{filled.联系电话}}" />
-    </view>
+      <!-- 多项选择 -->
+      <view class="field" wx:if="{{item.type==='multi'}}">
+        <view class="field-label">{{item.name}}<text class="red" wx:if="{{item.required}}"> *</text></view>
+        <checkbox-group bindchange="onMultiChange" data-id="{{item.id}}">
+          <label class="radio-item" wx:for="{{item.options}}" wx:key="*this" wx:for-item="opt">
+            <checkbox value="{{opt}}" color="#07c160"/> {{opt}}
+          </label>
+        </checkbox-group>
+      </view>
 
-    <view class="field">
-      <view class="field-label">班级</view>
-      <input class="field-input" placeholder="如：大六班" bindinput="onClassInput" value="{{filled.班级 || '大六班'}}" />
-    </view>
+      <!-- 图片上传 -->
+      <view class="field" wx:if="{{item.type==='image'}}">
+        <view class="field-label">{{item.name}}<text class="red" wx:if="{{item.required}}"> *</text></view>
+        <view class="image-upload-area" bindtap="chooseImage" data-id="{{item.id}}">
+          <image wx:if="{{filled[item.id]}}" src="{{filled[item.id]}}" mode="aspectFill" class="uploaded-img"/>
+          <view wx:else class="upload-placeholder">
+            <text class="upload-icon">+</text>
+            <text class="upload-text">点击上传图片</text>
+          </view>
+        </view>
+      </view>
 
-    <button class="btn-submit" bindtap="submit">提交接龙</button>
+      <!-- 手写签名 -->
+      <view class="field" wx:if="{{item.type==='signature'}}">
+        <view class="field-label">{{item.name}}<text class="red" wx:if="{{item.required}}"> *</text></view>
+        <canvas canvas-id="sign_{{item.id}}" class="sign-canvas" bindtap="openSign" data-id="{{item.id}}"></canvas>
+        <view class="sign-tip">点击画布签名</view>
+      </view>
+    </block>
+
+    <button class="btn-submit" bindtap="submit">提交{{form.formType==='checkin'?'打卡':'接龙'}}</button>
   </view>
 </view>
