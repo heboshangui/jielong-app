@@ -1,0 +1,28 @@
+<view class="container" wx:if="{{form}}">
+  <view class="stat-row">
+    <view class="stat-card">
+      <text class="stat-num">{{responses.length}}/{{form.totalCount}}</text>
+      <text class="stat-label">已完成人数</text>
+    </view>
+    <view class="stat-actions">
+      <button size="mini" bindtap="showRemind">一键提醒</button>
+      <button size="mini" type="primary" bindtap="exportExcel">导出Excel</button>
+    </view>
+  </view>
+
+  <button class="btn-share" bindtap="copyShareLink">复制分享链接 →</button>
+
+  <view class="search-row">
+    <input class="search-input" placeholder="搜索幼儿姓名…" bindinput="onSearch" value="{{searchKey}}" />
+  </view>
+
+  <view class="list-title">接龙名单（共{{responses.length}}条）</view>
+
+  <view wx:for="{{responses}}" wx:key="id" class="record-item">
+    <view class="record-name">{{item.data.幼儿姓名}}</view>
+    <view class="record-meta">{{item.data['家长/监护人']}} · {{item.data['联系电话']}}</view>
+    <view class="record-time">{{item.data['是否已认真阅读并对幼儿负责']}}</view>
+  </view>
+
+  <view wx:if="{{responses.length === 0}}" class="empty">暂无数据</view>
+</view>
