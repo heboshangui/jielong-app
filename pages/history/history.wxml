@@ -1,0 +1,57 @@
+<view class="container" wx:if="{{form}}">
+  <view class="header-card">
+    <view class="form-title">{{form.title}}</view>
+    <view class="form-meta">
+      <text wx:if="{{form.formType==='checkin'}}">📅 {{form.startDate}} 至 {{form.endDate}}</text>
+      <text wx:if="{{form.allowMakeup}}">✅ 允许补卡</text>
+    </view>
+  </view>
+
+  <view class="stats-row">
+    <view class="stat-box">
+      <text class="stat-num">{{groupedRecords.length}}</text>
+      <text class="stat-lbl">打卡人数</text>
+    </view>
+    <view class="stat-box">
+      <text class="stat-num">{{form.responses.length}}</text>
+      <text class="stat-lbl">打卡记录</text>
+    </view>
+    <view class="stat-box">
+      <text class="stat-num">{{form.responses.length > 0 && groupedRecords.length > 0 ? (form.responses.length / groupedRecords.length).toFixed(1) : 0}}</text>
+      <text class="stat-lbl">人均打卡</text>
+    </view>
+  </view>
+
+  <view class="search-row">
+    <input class="search-input" placeholder="搜索幼儿姓名…" bindinput="onSearch" value="{{searchKey}}" />
+  </view>
+
+  <view class="section-title">打卡明细</view>
+
+  <view class="person-card" wx:for="{{groupedRecords}}" wx:key="name">
+    <view class="person-header" data-idx="{{index}}" bindtap="togglePerson">
+      <view class="person-info">
+        <text class="person-name">{{item.name}}</text>
+        <text class="person-count">{{item.totalCount}}次打卡</text>
+      </view>
+      <text class="expand-icon">{{item._expanded ? '▼' : '▶'}}</text>
+    </view>
+
+    <view class="date-list" wx:if="{{item._expanded}}">
+      <view class="date-group" wx:for="{{item.dates}}" wx:for-item="date" wx:key="date">
+        <view class="date-label">{{date}}</view>
+        <view class="record-row" wx:for="{{item.byDate[date]}}" wx:for-item="rec" wx:key="id">
+          <text class="rec-time">{{rec.submittedAt ? rec.submittedAt.slice(11, 16) : ''}}</text>
+          <text class="rec-status">✓ 已{{form.formType==='checkin'?'打卡':'完成'}}</text>
+        </view>
+      </view>
+      <view class="no-records" wx:if="{{item.dates.length === 0}}">
+        <text>暂无记录</text>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{groupedRecords.length===0}}" class="empty">
+    <text>暂无打卡记录</text>
+  </view>
+</view>
