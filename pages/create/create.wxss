@@ -1,0 +1,14 @@
+page { background: #f0f4f8; font-family: 'PingFang SC', sans-serif; }
+.container { padding: 24rpx; }
+.section { background: white; border-radius: 16rpx; padding: 28rpx; margin-bottom: 20rpx; }
+.label { font-size: 28rpx; font-weight: 600; color: #333; margin-bottom: 12rpx; display: block; }
+.input { font-size: 30rpx; color: #333; }
+.textarea { font-size: 30rpx; color: #333; width: 100%; min-height: 120rpx; border: 1rpx solid #eee; border-radius: 10rpx; padding: 12rpx; box-sizing: border-box; }
+.picker { font-size: 30rpx; color: #333; padding: 8rpx 0; }
+.field-list { display: flex; flex-direction: column; gap: 16rpx; }
+.field-item { font-size: 28rpx; color: #555; padding: 12rpx 16rpx; background: #f8faf8; border-radius: 10rpx; display: flex; gap: 8rpx; }
+.required { color: #ff4d4f; }
+.btn-submit {
+  background: #07c160; color: white; border-radius: 24rpx; font-size: 34rpx; font-weight: 600;
+  padding: 28rpx 0; border: none; margin-top: 20rpx;
+}
