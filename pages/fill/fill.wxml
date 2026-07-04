@@ -1,0 +1,38 @@
+<view class="container" wx:if="{{form}}">
+  <view class="header">
+    <text class="form-title">{{form.title}}</text>
+    <view class="desc" wx:if="{{form.description}}">{{form.description}}</view>
+    <view class="deadline" wx:if="{{form.deadline}}">⏰ 截止：{{form.deadline}}</view>
+  </view>
+
+  <view class="form-body">
+    <view class="field">
+      <view class="field-label">幼儿姓名 <text class="red">*</text></view>
+      <input class="field-input" placeholder="请输入幼儿姓名" bindinput="onNameInput" value="{{filled.幼儿姓名}}" />
+    </view>
+
+    <view class="field">
+      <view class="field-label">是否已认真阅读并对幼儿负责 <text class="red">*</text></view>
+      <radio-group bindchange="onRadioChange">
+        <label class="radio-item"><radio value="是" color="#07c160" /> 我已认真阅读并会对幼儿负责</label>
+      </radio-group>
+    </view>
+
+    <view class="field">
+      <view class="field-label">家长/监护人 <text class="red">*</text></view>
+      <input class="field-input" placeholder="请输入家长或监护人姓名" bindinput="onGuardianInput" value="{{filled.家长/监护人}}" />
+    </view>
+
+    <view class="field">
+      <view class="field-label">联系电话 <text class="red">*</text></view>
+      <input class="field-input" type="number" placeholder="请输入联系电话" bindinput="onTelInput" value="{{filled.联系电话}}" />
+    </view>
+
+    <view class="field">
+      <view class="field-label">班级</view>
+      <input class="field-input" placeholder="如：大六班" bindinput="onClassInput" value="{{filled.班级 || '大六班'}}" />
+    </view>
+
+    <button class="btn-submit" bindtap="submit">提交接龙</button>
+  </view>
+</view>
